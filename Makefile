@@ -121,7 +121,7 @@ ifdef DEBUG
 CFLAGS += -g
 endif
 
-all: libhl hl libs
+all: libhl hl libs libhl.a
 
 install:
 	$(UNAME)==Darwin && make uninstall
@@ -184,6 +184,9 @@ sqlite: ${SQLITE} libhl
 mesa:
 	(cd libs/mesa && make)
 
+libhl.a: ${LIB} ${FMT} ${SDL} ${SSL} ${OPENAL} ${UI} ${UV} ${MYSQL}
+	ar rcs $@ $^
+
 release: release_version release_$(RELEASE_NAME)
 
 release_version:
@@ -244,10 +247,13 @@ codesign_osx:
 .c.o :
 	${CC} ${CFLAGS} -o $@ -c $<
 
+clean_a:
+	rm -f libhl.a
+
 clean_o:
 	rm -f ${STD} ${BOOT} ${RUNTIME} ${PCRE} ${HL} ${FMT} ${SDL} ${SSL} ${OPENAL} ${UI} ${UV} ${MYSQL} ${SQLITE} ${HL_DEBUG}
 
-clean: clean_o
+clean: clean_o clean_a
 	rm -f hl hl.exe libhl.$(LIBEXT) *.hdll
 
 .PHONY: libhl hl hlc fmt sdl libs release
