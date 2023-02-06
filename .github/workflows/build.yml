@@ -70,7 +70,7 @@ jobs:
 
     - name: Add msbuild to PATH
       if: startsWith(matrix.target, 'win')
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1.3.1
       with:
         vs-version: '[15.0,16.0)'
 
